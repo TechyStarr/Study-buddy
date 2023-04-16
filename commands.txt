@@ -1,0 +1,9 @@
+Set up venv just like in flask
+install django - pip install django
+run django-admin to view packages
+run django-admin startproject project_name
+cd into the project directory - cd studybuddy
+run python manage.py runserver to start up the django development server
+copy the port and view on your browser
+
+run python manage.py startapp base to create base application
