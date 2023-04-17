@@ -6,9 +6,10 @@
     
     {% csrf_token %}
     <p>Are you sure you want to delete "{{obj}}"?</p>
-    <a href="{{request.META.HTTP_REFERER}}"></a>
-    <input type="submit", value="Confirm">
-    
+
+    <a href="{{request.META.HTTP_REFERER}}">Go Back</a> <!--accessing the request object directly -->
+    <input type="submit" value="Confirm" />
+
     {{form.as_p}}
 </form>
 
