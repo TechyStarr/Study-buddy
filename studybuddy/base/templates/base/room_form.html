@@ -5,9 +5,10 @@
 <!-- Look up class based views -->
 
 <div>
-    <form action="POST" action="">
+    <form method="POST" action="">
         {% csrf_token %}
-            <input type="submit" value="submit" id="name">
+        {{form.as_p}} <!-- This is a django form, wraps a paragraph tag to all input fields -->
+        <input type="submit" value="Submit">
     </form>
 </div>
 
