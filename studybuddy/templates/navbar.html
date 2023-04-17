@@ -2,4 +2,23 @@
     <h1>Starr</h1>
 </a>
 
-<hr> <!--line break -->
+<hr> 
+
+<style>
+    #q {
+        width: 50%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+</style>
+
+<form method="GET" action="{% url 'home' %}">
+    <input type="text" name="q" id="q" placeholder="Search Rooms...">
+
+</form>
+
+<hr>
+
+<a href="{% url 'login'%}">Login</a>
