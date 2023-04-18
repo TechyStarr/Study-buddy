@@ -95,7 +95,8 @@ def home(request):
 
 def room(request, pk):
     room = Room.objects.get(id=pk)
-    room_messages = room.message_set.all().order_by('-created_at') # get all messages from the room, query child objs of a specific room. message is the model name
+    room_messages = room.message_set.all().order_by('-created_at') # get all messages from the room, query child objs of a specific room. message is the model name. one to many relationship
+    participants = room.participants.all() # many to many relationship
 
     if request.method == 'POST':
         message = Message.objects.create(
@@ -103,11 +104,12 @@ def room(request, pk):
             room=room,
             body=request.POST.get('body'),
         )
+        room.participants.add(request.user) # add the user to the participants list
         return redirect('room', pk=room.id)
 
 
 
-    context = {'room': room, 'room_messages': room_messages,}
+    context = {'room': room, 'room_messages': room_messages, 'participants': participants}
 
     return render(request, 'base/room.html', context)
 
@@ -145,7 +147,7 @@ def update_room(request, pk):
 def delete_room(request, pk):
     room = Room.objects.get(id=pk)
     if request.user != room.host:
-        return HttpResponse('You are not authorized to edit this page')
+        return HttpResponse('You are not authorized to delete this page')
 
     if request.method == 'POST':
 
@@ -154,3 +156,14 @@ def delete_room(request, pk):
     return render(request, 'base/delete.html', {'obj': room} )
 
 
+@login_required(login_url='login')
+def delete_message(request, pk):
+    message = Message.objects.get(id=pk)
+    if request.user != message.user and request.user != message.room:
+        return HttpResponse('You are not authorized to delete this message')
+
+    if request.method == 'POST':
+
+        message.delete()
+        return redirect('room', pk=message.room.id)
+    return render(request, 'base/delete.html', {'obj': message} )
