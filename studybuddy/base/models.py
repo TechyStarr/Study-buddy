@@ -16,7 +16,7 @@ class Room(models.Model):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
     description = models.TextField(null=True, blank=True)
-    # participants = models.ManyToManyField(User, related_name='participants')
+    participants = models.ManyToManyField(User, related_name='participants', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
