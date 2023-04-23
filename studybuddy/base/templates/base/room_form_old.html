@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<!-- Look up class based views -->
+
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{form.as_p}} <!-- This is a django form, wraps a paragraph tag to all input fields -->
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+
+{% endblock content%}
