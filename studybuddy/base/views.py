@@ -7,7 +7,7 @@ from .models import Room, Topic, Message
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from .forms import RoomForm
+from .forms import RoomForm, UserForm
 
 # Create your views here.
 
@@ -131,12 +131,19 @@ def create_room(request):
     form = RoomForm()
     topics = Topic.objects.all()
     if request.method == 'POST':
-        form = RoomForm(request.POST)
-        if form.is_valid():
-            room = form.save(commit=False) # commit false means dont save to db yet
-            room.host = request.user
-            room.save()
-            return redirect('home')
+        
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name) # get the topic if it exists, if not create it
+        
+        room = Room.objects.create(
+            host = request.user,
+            topic = topic,
+            name = request.POST.get('name'),
+            description = request.POST.get('description'),
+        )
+        
+        
+        return redirect('home')
 
     context = {'form': form, 'topics': topics}
     return render(request, 'base/room_form.html', context)
@@ -151,12 +158,15 @@ def update_room(request, pk):
         return HttpResponse('You are not authorized to edit this page')
 
     if request.method == 'POST':
-        form = RoomForm(request.POST, instance=room) # update the form with the new data
-        if form.is_valid():
-            form.save()
-            return redirect('home')
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name) # get the topic if it exists, if not create it
+        room.name = request.POST.get('name')
+        room.description = request.POST.get('description')
+        room.topic = topic
+        room.save()
+        return redirect('home')
 
-    context = {"form": form, 'topics': topics}
+    context = {"form": form, 'topics': topics, 'room': room}
     return render(request, 'base/room_form.html', context)
 
 @login_required(login_url='login')
@@ -183,3 +193,11 @@ def delete_message(request, pk):
         message.delete()
         return redirect('room', pk=message.room.id)
     return render(request, 'base/delete.html', {'obj': message} )
+
+
+@login_required(login_url='login')
+def update_user(request):
+    user = request.user
+    form = UserForm(instance=user) # pre-populate the form with the existing data
+
+    return render(request, 'base/update_user.html', {'form': form})
