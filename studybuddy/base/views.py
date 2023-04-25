@@ -199,5 +199,11 @@ def delete_message(request, pk):
 def update_user(request):
     user = request.user
     form = UserForm(instance=user) # pre-populate the form with the existing data
+    
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=user) # pre-populate the form with the existing data
+        if form.is_valid():
+            form.save()
+            return redirect('user-profile', pk=user.id)
 
     return render(request, 'base/update_user.html', {'form': form})
