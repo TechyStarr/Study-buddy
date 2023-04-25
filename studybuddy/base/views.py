@@ -58,21 +58,9 @@ def registerUser(request):
     return render(request, 'base/login_register.html', context)
 
 
-
-
-
-
-
-
-
-
 def logoutUser(request):
     logout(request)
     return redirect('home')
-
-
-
-
 
 
 def home(request):
@@ -84,7 +72,7 @@ def home(request):
         ) # filter by topic name, icontains means case insensitive
 
 
-    topics = Topic.objects.all()
+    topics = Topic.objects.all()[0:5] # get the first 5 topics
     room_count = rooms.count()
     room_messages = Message.objects.filter(Q(room__topic__name__icontains=q)) # get the last 5 messages
 
@@ -215,3 +203,7 @@ def topics_page(request):
     topics = Topic.objects.filter(name__icontains=q)
     return render(request, 'base/topics.html', {'topics': topics})
 
+
+def activity_page(request):
+    room_messages = Message.objects.all()
+    return render(request, 'base/activity.html', {'room_messages': room_messages})
