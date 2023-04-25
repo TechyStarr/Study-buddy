@@ -1,9 +1,22 @@
-from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from base.models import Room
+from .serializers import RoomSerializer
 
+
+@api_view(['GET'])
 def getRoutes(request):
     routes = [
         'GET/api',
         'GET/api/rooms',
         'GET/api/rooms/:id',
     ]
-    return JsonResponse(routes, safe=False) # safe=False allows for lists to be returned
+    return Response(routes) # safe=False allows for lists to be returned
+
+
+@api_view(['GET'])
+def get_rooms(request):
+    rooms = Room.objects.all()
+    serializer = RoomSerializer(rooms, many=True) # many=True allows for multiple objects to be returned
+    return Response(serializer.data)
+    # return Response(rooms)
