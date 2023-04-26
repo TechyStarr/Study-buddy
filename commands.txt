@@ -13,3 +13,8 @@ run" python manage.py startapp base" to create base application
 run "python manage.py migrate" to execute built-in migrations
 run "python manage.py makemigrations" to migrate
 Then run "python manage.py migrate" again to apply the migrations
+
+
+python -m pip install django-cors-headers # 
+
+common thing to note after installation is that you should add the installed package to "INSTALLED_APPS" in settings.py
