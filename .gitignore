@@ -19,4 +19,4 @@ eggs/
 .eggs/
 lib/
 StudyBud
-learn_django/
+env/
