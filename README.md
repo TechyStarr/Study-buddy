@@ -23,7 +23,7 @@ Clone the repository
 
 
 ```console
-git clone https://github.com/TechyStarr/Study-buddy/.git
+git clone https://github.com/TechyStarr/Study-buddy/
 ```
 
 
